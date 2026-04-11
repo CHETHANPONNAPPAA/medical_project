@@ -12,7 +12,9 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 def detect():
-    data = request.json
+    data = request.get_json(force=True)   # ✅ FIXED
+    print(data)  # (optional debug)
+
     result = predict(data)
     return jsonify({"result": result})
 
