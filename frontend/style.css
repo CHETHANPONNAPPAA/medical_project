@@ -1,0 +1,28 @@
+body {
+  font-family: Arial;
+  background: linear-gradient(135deg, #11998e, #38ef7d);
+  text-align: center;
+  padding: 20px;
+}
+
+.container {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  width: 350px;
+  margin: auto;
+}
+
+input {
+  width: 90%;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+button {
+  padding: 10px;
+  background: green;
+  color: white;
+  border-radius: 10px;
+}
