@@ -1,8 +1,11 @@
 import pandas as pd
 from sklearn.ensemble import IsolationForest
+import os
+
+data = pd.read_csv(os.path.join(os.path.dirname(__file__), "indian_liver_patient.csv"))
 
 # Load dataset
-data = pd.read_csv("indian_liver_patient.csv")
+
 data = data.dropna()
 
 # Convert categorical
