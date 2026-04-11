@@ -1,28 +1,44 @@
 body {
-  font-family: Arial;
+  font-family: 'Segoe UI';
   background: linear-gradient(135deg, #11998e, #38ef7d);
-  text-align: center;
-  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .container {
   background: white;
-  padding: 20px;
-  border-radius: 15px;
-  width: 350px;
-  margin: auto;
+  padding: 25px;
+  border-radius: 20px;
+  width: 400px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+h1 {
+  text-align: center;
 }
 
 input {
-  width: 90%;
-  margin: 5px;
+  width: 100%;
   padding: 10px;
+  margin: 5px 0;
   border-radius: 10px;
+  border: 1px solid #ccc;
 }
 
 button {
-  padding: 10px;
-  background: green;
+  width: 100%;
+  padding: 12px;
+  background: #11998e;
   color: white;
+  border: none;
   border-radius: 10px;
+  font-weight: bold;
+}
+
+#result {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 18px;
 }
