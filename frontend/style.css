@@ -1,42 +1,125 @@
 body {
   margin: 0;
-  font-family: Arial;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f1f5f9;
 }
 
+/* Layout */
+.dashboard {
+  display: flex;
+}
+
+/* Sidebar */
 .sidebar {
   width: 220px;
   height: 100vh;
-  background: #0b3d91;
+  background: #023e8a;
   color: white;
-  position: fixed;
   padding: 20px;
 }
 
-.sidebar button {
-  display: block;
-  width: 100%;
-  margin: 10px 0;
+.sidebar h2 {
+  margin-bottom: 30px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.sidebar li:hover, .active {
+  background: #0077b6;
+}
+
+/* Main */
+.main {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Topbar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+/* Card */
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Form */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+input, select {
   padding: 10px;
-  background: none;
-  border: none;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Button */
+.btn {
+  margin-top: 20px;
+  padding: 12px;
+  width: 100%;
+  background: #0077b6;
   color: white;
-  text-align: left;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-.main {
-  margin-left: 240px;
+.btn:hover {
+  background: #023e8a;
+}
+
+/* Loader */
+.loader {
+  border: 5px solid #eee;
+  border-top: 5px solid #0077b6;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  margin: 20px auto;
+  animation: spin 1s linear infinite;
+}
+
+/* Result */
+.result-card {
+  margin-top: 20px;
   padding: 20px;
+  border-radius: 8px;
+  background: #f8f9fa;
 }
 
-input {
-  display: block;
-  margin: 5px 0;
-  padding: 10px;
-  width: 300px;
+.success {
+  border-left: 6px solid green;
 }
 
-button {
-  margin-top: 10px;
-  padding: 10px;
+.error {
+  border-left: 6px solid red;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Animation */
+@keyframes spin {
+  100% { transform: rotate(360deg); }
 }

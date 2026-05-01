@@ -1,76 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>MedCare Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="sidebar">
-  <h2>MedCare</h2>
+<div class="dashboard">
 
-  <button onclick="showSection('dashboard')">Dashboard</button>
-  <button onclick="showSection('patients')">Patients</button>
-  <button onclick="showSection('reports')">Reports</button>
-  <button onclick="showSection('settings')">Settings</button>
-</div>
-
-<div class="main">
-
-  <!-- DASHBOARD -->
-  <div id="dashboard" class="section">
-    <h2>Liver Health Detection</h2>
-
-    <p>Total Patients: <span id="totalPatients">0</span></p>
-
-    <!-- FORM -->
-    <input id="Age" placeholder="Age">
-    <input id="Gender" placeholder="Male/Female">
-    <input id="Total_Bilirubin" placeholder="Total Bilirubin">
-    <input id="Direct_Bilirubin" placeholder="Direct Bilirubin">
-    <input id="Alkaline_Phosphotase" placeholder="ALP">
-    <input id="Alamine_Aminotransferase" placeholder="ALT">
-    <input id="Aspartate_Aminotransferase" placeholder="AST">
-    <input id="Total_Proteins" placeholder="Total Proteins">
-    <input id="Albumin" placeholder="Albumin">
-    <input id="Albumin_and_Globulin_Ratio" placeholder="A/G Ratio">
-
-    <button onclick="predict()">Analyze Patient</button>
-
-    <h3 id="result"></h3>
-
-    <!-- UPLOAD -->
-    <h3>Upload Report</h3>
-    <input type="file" id="reportFile">
-    <button onclick="uploadReport()">Upload & Analyze</button>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>🩺 MedCare</h2>
+    <ul>
+      <li class="active">Dashboard</li>
+      <li>Patients</li>
+      <li>Reports</li>
+      <li>Settings</li>
+    </ul>
   </div>
 
-  <!-- PATIENTS -->
-  <div id="patients" class="section" style="display:none;">
-    <h2>Patients</h2>
+  <!-- Main Content -->
+  <div class="main">
 
-    <table border="1" id="patientsTable">
-      <tr>
-        <th>Age</th>
-        <th>Result</th>
-      </tr>
-    </table>
-  </div>
+    <!-- Topbar -->
+    <div class="topbar">
+      <h2>Liver Health Detection</h2>
+      <span>👨‍⚕️ Doctor Panel</span>
+    </div>
 
-  <!-- REPORTS -->
-  <div id="reports" class="section" style="display:none;">
-    <h2>Reports</h2>
-    <div id="reportHistory"></div>
-  </div>
+    <!-- Card -->
+    <div class="card">
 
-  <!-- SETTINGS -->
-  <div id="settings" class="section" style="display:none;">
-    <h2>Settings</h2>
+      <h3>Patient Details</h3>
 
-    <label>API URL:</label>
-    <input id="apiUrl" value="https://medical-project-c3re.onrender.com">
+      <div class="form-grid">
+        <input id="Age" type="number" placeholder="Age">
 
-    <button onclick="saveSettings()">Save</button>
+        <select id="Gender">
+          <option value="">Gender</option>
+          <option>Male</option>
+          <option>Female</option>
+        </select>
+
+        <input id="Total_Bilirubin" placeholder="Total Bilirubin">
+        <input id="Direct_Bilirubin" placeholder="Direct Bilirubin">
+        <input id="Alkaline_Phosphotase" placeholder="ALP">
+        <input id="Alamine_Aminotransferase" placeholder="ALT">
+        <input id="Aspartate_Aminotransferase" placeholder="AST">
+        <input id="Total_Proteins" placeholder="Total Proteins">
+        <input id="Albumin" placeholder="Albumin">
+        <input id="Albumin_and_Globulin_Ratio" placeholder="A/G Ratio">
+      </div>
+
+      <button class="btn" onclick="predict()">Analyze Patient</button>
+
+      <!-- Loader -->
+      <div id="loader" class="loader hidden"></div>
+
+      <!-- Result -->
+      <div id="resultCard" class="result-card hidden">
+        <h3>Diagnosis Result</h3>
+        <p id="result"></p>
+      </div>
+
+    </div>
+
   </div>
 
 </div>
