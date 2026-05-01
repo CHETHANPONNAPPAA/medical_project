@@ -1,28 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Liver Health Checker</title>
+  <title>MedCare Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-  <h1>🩺 Liver Health Detection</h1>
+<div class="sidebar">
+  <h2>MedCare</h2>
 
-  <input id="Age" placeholder="Age">
-  <input id="Gender" placeholder="Male/Female">
-  <input id="Total_Bilirubin" placeholder="Total Bilirubin">
-  <input id="Direct_Bilirubin" placeholder="Direct Bilirubin">
-  <input id="Alkaline_Phosphotase" placeholder="ALP">
-  <input id="Alamine_Aminotransferase" placeholder="ALT">
-  <input id="Aspartate_Aminotransferase" placeholder="AST">
-  <input id="Total_Proteins" placeholder="Total Proteins">
-  <input id="Albumin" placeholder="Albumin">
-  <input id="Albumin_and_Globulin_Ratio" placeholder="A/G Ratio">
+  <button onclick="showSection('dashboard')">Dashboard</button>
+  <button onclick="showSection('patients')">Patients</button>
+  <button onclick="showSection('reports')">Reports</button>
+  <button onclick="showSection('settings')">Settings</button>
+</div>
 
-  <button onclick="predict()">Check Health</button>
+<div class="main">
 
-  <h2 id="result"></h2>
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="section">
+    <h2>Liver Health Detection</h2>
+
+    <p>Total Patients: <span id="totalPatients">0</span></p>
+
+    <!-- FORM -->
+    <input id="Age" placeholder="Age">
+    <input id="Gender" placeholder="Male/Female">
+    <input id="Total_Bilirubin" placeholder="Total Bilirubin">
+    <input id="Direct_Bilirubin" placeholder="Direct Bilirubin">
+    <input id="Alkaline_Phosphotase" placeholder="ALP">
+    <input id="Alamine_Aminotransferase" placeholder="ALT">
+    <input id="Aspartate_Aminotransferase" placeholder="AST">
+    <input id="Total_Proteins" placeholder="Total Proteins">
+    <input id="Albumin" placeholder="Albumin">
+    <input id="Albumin_and_Globulin_Ratio" placeholder="A/G Ratio">
+
+    <button onclick="predict()">Analyze Patient</button>
+
+    <h3 id="result"></h3>
+
+    <!-- UPLOAD -->
+    <h3>Upload Report</h3>
+    <input type="file" id="reportFile">
+    <button onclick="uploadReport()">Upload & Analyze</button>
+  </div>
+
+  <!-- PATIENTS -->
+  <div id="patients" class="section" style="display:none;">
+    <h2>Patients</h2>
+
+    <table border="1" id="patientsTable">
+      <tr>
+        <th>Age</th>
+        <th>Result</th>
+      </tr>
+    </table>
+  </div>
+
+  <!-- REPORTS -->
+  <div id="reports" class="section" style="display:none;">
+    <h2>Reports</h2>
+    <div id="reportHistory"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="settings" class="section" style="display:none;">
+    <h2>Settings</h2>
+
+    <label>API URL:</label>
+    <input id="apiUrl" value="https://medical-project-c3re.onrender.com">
+
+    <button onclick="saveSettings()">Save</button>
+  </div>
+
 </div>
 
 <script src="script.js"></script>
