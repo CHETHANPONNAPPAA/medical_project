@@ -1,6 +1,32 @@
+// =====================
+// CONFIG (CHANGE THIS)
+// =====================
+const BASE_URL = "https://medical-project-c3re.onrender.com"; // 🔴 CHANGE THIS
+
 let stats = { total: 0, low: 0, moderate: 0, high: 0 };
 let barChart, pieChart;
+
+
+// =====================
+// PREDICT FUNCTION
+// =====================
 function predict() {
+
+  const loader = document.getElementById("loader");
+  const resultCard = document.getElementById("resultCard");
+  const resultTitle = document.getElementById("resultTitle");
+  const resultText = document.getElementById("result");
+
+  const Age = document.getElementById("Age");
+  const Gender = document.getElementById("Gender");
+  const Total_Bilirubin = document.getElementById("Total_Bilirubin");
+  const Direct_Bilirubin = document.getElementById("Direct_Bilirubin");
+  const Alkaline_Phosphotase = document.getElementById("Alkaline_Phosphotase");
+  const Alamine_Aminotransferase = document.getElementById("Alamine_Aminotransferase");
+  const Aspartate_Aminotransferase = document.getElementById("Aspartate_Aminotransferase");
+  const Total_Proteins = document.getElementById("Total_Proteins");
+  const Albumin = document.getElementById("Albumin");
+  const Albumin_and_Globulin_Ratio = document.getElementById("Albumin_and_Globulin_Ratio");
 
   loader.classList.remove("hidden");
 
@@ -17,7 +43,16 @@ function predict() {
     Albumin_and_Globulin_Ratio: parseFloat(Albumin_and_Globulin_Ratio.value)
   };
 
-  fetch("http://127.0.0.1:5000/predict", {
+  // Validation
+  for (let key in data) {
+    if (isNaN(data[key])) {
+      loader.classList.add("hidden");
+      alert("⚠️ Please fill all fields correctly");
+      return;
+    }
+  }
+
+  fetch(`${BASE_URL}/predict`, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(data)
@@ -27,11 +62,16 @@ function predict() {
 
     loader.classList.add("hidden");
 
+    if (d.error) {
+      alert("❌ " + d.error);
+      return;
+    }
+
     resultCard.classList.remove("hidden");
     resultCard.className = "result-box";
 
     resultTitle.innerText = d.level;
-    result.innerText = "Score: " + d.score;
+    resultText.innerText = "Score: " + d.score;
 
     stats.total++;
 
@@ -46,30 +86,43 @@ function predict() {
       stats.low++;
     }
 
-    totalCount.innerText = stats.total;
-    lowCount.innerText = stats.low;
-    modCount.innerText = stats.moderate;
-    highCount.innerText = stats.high;
-  });
-  if (barChart && pieChart) {
-  barChart.data.datasets[0].data = [
-    stats.low,
-    stats.moderate,
-    stats.high
-  ];
-  barChart.update();
+    document.getElementById("totalCount").innerText = stats.total;
+    document.getElementById("lowCount").innerText = stats.low;
+    document.getElementById("modCount").innerText = stats.moderate;
+    document.getElementById("highCount").innerText = stats.high;
 
-  pieChart.data.datasets[0].data = [
-    stats.low,
-    stats.moderate,
-    stats.high
-  ];
-  pieChart.update();
-  }
+    // Update charts if open
+    if (barChart && pieChart) {
+      barChart.data.datasets[0].data = [
+        stats.low,
+        stats.moderate,
+        stats.high
+      ];
+      barChart.update();
+
+      pieChart.data.datasets[0].data = [
+        stats.low,
+        stats.moderate,
+        stats.high
+      ];
+      pieChart.update();
+    }
+
+  })
+  .catch(err => {
+    loader.classList.add("hidden");
+    alert("❌ Cannot connect to server");
+    console.log(err);
+  });
 }
 
+
+// =====================
+// PATIENTS TABLE
+// =====================
 function loadPatients() {
-  fetch("http://127.0.0.1:5000/patients")
+
+  fetch(`${BASE_URL}/patients`)
     .then(res => res.json())
     .then(data => {
 
@@ -90,37 +143,21 @@ function loadPatients() {
 
       html += "</table>";
 
-      mainContent.innerHTML = html;
+      document.getElementById("mainContent").innerHTML = html;
+    })
+    .catch(err => {
+      alert("❌ Failed to load patients");
+      console.log(err);
     });
 }
 
-function clearForm(){
-  document.querySelectorAll("input").forEach(i=>i.value="");
-}
 
-function downloadReport(){
-  const blob = new Blob([result.innerText], {type:"text/plain"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "report.txt";
-  a.click();
-
-  showToast();
-}
-
-function showToast(){
-  const t = document.getElementById("toast");
-  t.classList.remove("hidden");
-
-  setTimeout(()=>t.classList.add("hidden"),2000);
-}
-
-function showDashboard(){
-  location.reload();
-}
+// =====================
+// ANALYTICS PAGE
+// =====================
 function showAnalytics() {
 
-  mainContent.innerHTML = `
+  document.getElementById("mainContent").innerHTML = `
     <h2>Analytics Dashboard</h2>
 
     <div class="analytics">
@@ -138,6 +175,8 @@ function showAnalytics() {
 
   initCharts();
 }
+
+
 function initCharts() {
 
   const barCtx = document.getElementById("barChart").getContext("2d");
@@ -165,4 +204,36 @@ function initCharts() {
       }]
     }
   });
+}
+
+
+// =====================
+// UTIL FUNCTIONS
+// =====================
+function clearForm(){
+  document.querySelectorAll("input").forEach(i => i.value = "");
+  document.getElementById("Gender").value = "";
+}
+
+function downloadReport(){
+  const text = document.getElementById("resultTitle").innerText + "\n" +
+               document.getElementById("result").innerText;
+
+  const blob = new Blob([text], {type:"text/plain"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "report.txt";
+  a.click();
+
+  showToast();
+}
+
+function showToast(){
+  const t = document.getElementById("toast");
+  t.classList.remove("hidden");
+  setTimeout(()=>t.classList.add("hidden"),2000);
+}
+
+function showDashboard(){
+  location.reload();
 }
