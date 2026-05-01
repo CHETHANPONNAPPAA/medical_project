@@ -1,67 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>MedCare Dashboard</title>
+  <title>MedCare</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body>
 
 <div class="dashboard">
 
   <!-- Sidebar -->
   <div class="sidebar">
-    <h2>🩺 MedCare</h2>
+    <h2><i class="fa-solid fa-heart-pulse"></i> MedCare</h2>
+
     <ul>
-      <li class="active">Dashboard</li>
-      <li>Patients</li>
-      <li>Reports</li>
-      <li>Settings</li>
+      <li class="active" onclick="showDashboard()"><i class="fa fa-home"></i> Dashboard</li>
+      <li onclick="loadPatients()"><i class="fa fa-users"></i> Patients</li>
+      <li onclick="showAnalytics()"><i class="fa fa-chart-bar"></i> Analytics</li>
     </ul>
   </div>
 
-  <!-- Main Content -->
-  <div class="main">
+  <!-- Main -->
+  <div class="main" id="mainContent">
 
-    <!-- Topbar -->
-    <div class="topbar">
-      <h2>Liver Health Detection</h2>
-      <span>👨‍⚕️ Doctor Panel</span>
-    </div>
+    <div id="dashboardView">
 
-    <!-- Card -->
-    <div class="card">
-
-      <h3>Patient Details</h3>
-
-      <div class="form-grid">
-        <input id="Age" type="number" placeholder="Age">
-
-        <select id="Gender">
-          <option value="">Gender</option>
-          <option>Male</option>
-          <option>Female</option>
-        </select>
-
-        <input id="Total_Bilirubin" placeholder="Total Bilirubin">
-        <input id="Direct_Bilirubin" placeholder="Direct Bilirubin">
-        <input id="Alkaline_Phosphotase" placeholder="ALP">
-        <input id="Alamine_Aminotransferase" placeholder="ALT">
-        <input id="Aspartate_Aminotransferase" placeholder="AST">
-        <input id="Total_Proteins" placeholder="Total Proteins">
-        <input id="Albumin" placeholder="Albumin">
-        <input id="Albumin_and_Globulin_Ratio" placeholder="A/G Ratio">
+      <!-- Top -->
+      <div class="topbar">
+        <h2>Liver Health Detection</h2>
+        <span>👨‍⚕️ Doctor Panel</span>
       </div>
 
-      <button class="btn" onclick="predict()">Analyze Patient</button>
+      <!-- Stats -->
+      <div class="stats">
+        <div class="card stat">
+          <i class="fa fa-users"></i>
+          <h3 id="totalCount">0</h3>
+          <p>Total</p>
+        </div>
 
-      <!-- Loader -->
-      <div id="loader" class="loader hidden"></div>
+        <div class="card stat green">
+          <i class="fa fa-check"></i>
+          <h3 id="lowCount">0</h3>
+          <p>Low Risk</p>
+        </div>
 
-      <!-- Result -->
-      <div id="resultCard" class="result-card hidden">
-        <h3>Diagnosis Result</h3>
-        <p id="result"></p>
+        <div class="card stat orange">
+          <i class="fa fa-exclamation"></i>
+          <h3 id="modCount">0</h3>
+          <p>Moderate</p>
+        </div>
+
+        <div class="card stat red">
+          <i class="fa fa-triangle-exclamation"></i>
+          <h3 id="highCount">0</h3>
+          <p>High Risk</p>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="card">
+
+        <h3>Patient Details</h3>
+
+        <div class="form-grid">
+          <input id="Age" placeholder="Age">
+          <select id="Gender">
+            <option value="">Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+
+          <input id="Total_Bilirubin" placeholder="Total Bilirubin">
+          <input id="Direct_Bilirubin" placeholder="Direct Bilirubin">
+          <input id="Alkaline_Phosphotase" placeholder="ALP">
+          <input id="Alamine_Aminotransferase" placeholder="ALT">
+          <input id="Aspartate_Aminotransferase" placeholder="AST">
+          <input id="Total_Proteins" placeholder="Total Proteins">
+          <input id="Albumin" placeholder="Albumin">
+          <input id="Albumin_and_Globulin_Ratio" placeholder="A/G Ratio">
+        </div>
+
+        <div class="btn-group">
+          <button class="btn primary" onclick="predict()"><i class="fa fa-search"></i> Analyze</button>
+          <button class="btn outline" onclick="clearForm()"><i class="fa fa-rotate"></i> Clear</button>
+          <button class="btn success" onclick="downloadReport()"><i class="fa fa-download"></i> Download</button>
+        </div>
+
+        <div id="loader" class="loader hidden"></div>
+
+        <div id="resultCard" class="result-box hidden">
+          <h3 id="resultTitle"></h3>
+          <p id="result"></p>
+        </div>
+
       </div>
 
     </div>
@@ -70,6 +105,10 @@
 
 </div>
 
+<!-- Toast -->
+<div id="toast" class="toast hidden">✅ Report downloaded</div>
+
 <script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
