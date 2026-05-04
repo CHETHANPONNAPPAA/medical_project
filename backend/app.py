@@ -107,6 +107,7 @@ def login():
 # PREDICT + SAVE
 # =========================
 import time
+import sqlite3
 
 @app.route('/predict', methods=['POST'])
 def detect():
@@ -114,7 +115,9 @@ def detect():
         data = request.get_json(force=True)
         result = predict(data)
 
-        for _ in range(3):  # retry 3 times
+        success = False
+
+        for _ in range(5):  # retry 5 times
             try:
                 conn = get_db()
                 c = conn.cursor()
@@ -126,13 +129,22 @@ def detect():
 
                 conn.commit()
                 conn.close()
+
+                print("✅ Saved to DB")  # debug
+                success = True
                 break
-            except sqlite3.OperationalError:
+
+            except sqlite3.OperationalError as e:
+                print("❌ DB locked, retrying...", e)
                 time.sleep(1)
+
+        if not success:
+            return jsonify({"error": "DB write failed"}), 500
 
         return jsonify(result)
 
     except Exception as e:
+        print("❌ ERROR:", e)
         return jsonify({"error": str(e)}), 500
 
 
