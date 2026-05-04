@@ -1,3 +1,6 @@
+if (!localStorage.getItem("loggedIn")) {
+  window.location.href = "login.html";
+}
 // =====================
 // CONFIG (CHANGE THIS)
 // =====================
@@ -236,4 +239,8 @@ function showToast(){
 
 function showDashboard(){
   location.reload();
+}
+function logout(){
+  localStorage.removeItem("loggedIn");
+  window.location.href = "login.html";
 }
