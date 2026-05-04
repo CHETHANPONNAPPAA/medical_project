@@ -106,23 +106,29 @@ def login():
 # =========================
 # PREDICT + SAVE
 # =========================
+import time
+
 @app.route('/predict', methods=['POST'])
 def detect():
     try:
         data = request.get_json(force=True)
-
         result = predict(data)
 
-        conn = get_db()
-        c = conn.cursor()
+        for _ in range(3):  # retry 3 times
+            try:
+                conn = get_db()
+                c = conn.cursor()
 
-        c.execute(
-            "INSERT INTO patients (data, level, score) VALUES (?, ?, ?)",
-            (str(data), result['level'], result['score'])
-        )
+                c.execute(
+                    "INSERT INTO patients (data, level, score) VALUES (?, ?, ?)",
+                    (str(data), result['level'], result['score'])
+                )
 
-        conn.commit()
-        conn.close()
+                conn.commit()
+                conn.close()
+                break
+            except sqlite3.OperationalError:
+                time.sleep(1)
 
         return jsonify(result)
 
@@ -156,4 +162,4 @@ def get_patients():
 # =========================
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, threaded=False)
