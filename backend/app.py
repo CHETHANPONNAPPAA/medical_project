@@ -11,13 +11,21 @@ DB_NAME = "database.db"
 
 
 # =========================
+# DB CONNECTION (FIXED)
+# =========================
+def get_db():
+    conn = sqlite3.connect(DB_NAME, timeout=10, check_same_thread=False)
+    conn.execute("PRAGMA journal_mode=WAL;")  # 🔥 fix locking
+    return conn
+
+
+# =========================
 # INIT DATABASE
 # =========================
 def init_db():
-    conn = sqlite3.connect(DB_NAME)
+    conn = get_db()
     c = conn.cursor()
 
-    # Users
     c.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -26,7 +34,6 @@ def init_db():
         )
     ''')
 
-    # Patients
     c.execute('''
         CREATE TABLE IF NOT EXISTS patients (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,7 +60,7 @@ def register():
     password = data.get("password")
 
     try:
-        conn = sqlite3.connect(DB_NAME)
+        conn = get_db()
         c = conn.cursor()
 
         c.execute(
@@ -79,7 +86,7 @@ def login():
     username = data.get("username")
     password = data.get("password")
 
-    conn = sqlite3.connect(DB_NAME)
+    conn = get_db()
     c = conn.cursor()
 
     c.execute(
@@ -106,7 +113,7 @@ def detect():
 
         result = predict(data)
 
-        conn = sqlite3.connect(DB_NAME)
+        conn = get_db()
         c = conn.cursor()
 
         c.execute(
@@ -128,7 +135,7 @@ def detect():
 # =========================
 @app.route('/patients', methods=['GET'])
 def get_patients():
-    conn = sqlite3.connect(DB_NAME)
+    conn = get_db()
     c = conn.cursor()
 
     c.execute("SELECT id, level, score FROM patients")
